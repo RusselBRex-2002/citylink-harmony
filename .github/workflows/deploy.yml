@@ -1,3 +1,8 @@
+permissions:
+  contents: write  # Allow writing to repository contents
+  pages: write     # Allow GitHub Pages deployment
+  id-token: write  # Required for OIDC token
+  
 name: Deploy to GitHub Pages
 
 on:
