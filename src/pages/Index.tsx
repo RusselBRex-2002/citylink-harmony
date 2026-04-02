@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
-  Shield, Zap, Users, AlertTriangle, Eye, FileText, Target,
+  Shield, Zap, Users, AlertTriangle, Eye, FileText,
   TrendingUp, CheckCircle, ArrowRight, Layers, Globe, Lock,
   BarChart3, Volume2, MapPin, Smartphone, ChevronRight,
   Search, Lightbulb, Puzzle, Palette, MessageSquare, Clock,
@@ -100,7 +100,7 @@ const PersonaCard: React.FC<{
   </div>
 );
 
-const Principle: React.FC<{ number: string; title: string; desc: string; icon: React.ElementType }> = ({ number, title, desc, icon: Icon }) => (
+const Principle: React.FC<{ title: string; desc: string; icon: React.ElementType }> = ({ title, desc, icon: Icon }) => (
   <div className="p-6 rounded-2xl bg-card border border-border shadow-card">
     <div className="flex items-start gap-4">
       <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center flex-shrink-0">
@@ -108,7 +108,6 @@ const Principle: React.FC<{ number: string; title: string; desc: string; icon: R
       </div>
       <div>
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-[10px] font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded-full">0{number}</span>
           <h4 className="text-sm font-semibold text-foreground">{title}</h4>
         </div>
         <p className="text-sm text-muted-foreground leading-relaxed">{desc}</p>
@@ -118,40 +117,13 @@ const Principle: React.FC<{ number: string; title: string; desc: string; icon: R
 );
 
 /* ─── Navigation ─── */
-const navItems = [
-  { id: "problem", label: "Problem" },
-  { id: "research", label: "Research" },
-  { id: "flow", label: "Architecture" },
-  { id: "wireframes", label: "Wireframes" },
-  { id: "mockups", label: "Mockups" },
-  { id: "system", label: "Design System" },
-  { id: "rationale", label: "Rationale" },
-];
 
 /* ════════════════════════════════════════════
    MAIN PAGE
    ════════════════════════════════════════════ */
 
 const Index: React.FC = () => {
-  const [activeSection, setActiveSection] = useState("problem");
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: "-40% 0px -50% 0px" }
-    );
-    navItems.forEach(({ id }) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-    return () => observer.disconnect();
-  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -197,26 +169,6 @@ const Index: React.FC = () => {
         </div>
       </section>
 
-      {/* ── STICKY NAV ── */}
-      <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex gap-1 overflow-x-auto py-3 scrollbar-hide">
-            {navItems.map((item) => (
-              <a
-                key={item.id}
-                href={`#${item.id}`}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
-                  activeSection === item.id
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:text-foreground hover:bg-secondary"
-                }`}
-              >
-                {item.label}
-              </a>
-            ))}
-          </div>
-        </div>
-      </nav>
 
       {/* ── PROBLEM OVERVIEW ── */}
       <Section id="problem">
@@ -274,12 +226,11 @@ const Index: React.FC = () => {
         {/* Research methodology */}
         <div className="mb-12">
           <h3 className="text-lg font-semibold text-foreground mb-4">Research Methodology</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {[
               { icon: Search, label: "Desk Research", desc: "25+ academic papers, industry reports, and regulatory documents analyzed" },
               { icon: Users, label: "Persona Development", desc: "Synthesized from demographic data, survey findings, and behavioral archetypes" },
               { icon: Puzzle, label: "Competitive Audit", desc: "Analyzed 8 existing platforms across safety, delivery, and civic tech" },
-              { icon: Target, label: "Heuristic Analysis", desc: "Evaluated against Nielsen's 10 usability heuristics and WCAG 2.1" },
             ].map((m) => (
               <div key={m.label} className="p-4 rounded-xl bg-card border border-border">
                 <m.icon className="w-5 h-5 text-primary mb-2" />
@@ -365,7 +316,7 @@ const Index: React.FC = () => {
           <InsightCard icon={Shield} title="Safety-First Mindset" desc="78% of surveyed urban residents prioritize safety over delivery speed — yet current platforms optimize only for efficiency metrics (Pew Research, 2023)." />
           <InsightCard icon={Lock} title="Accountability Void" desc="When incidents occur, citizens lack clear channels to report issues. Operators face no structured follow-up process, creating a trust deficit." />
           <InsightCard icon={Volume2} title="Noise & Quality of Life" desc="Drone noise complaints rose 340% in FAA pilot cities. Residents demand scheduled quiet zones and transparent flight path information." />
-          <InsightCard icon={Target} title="Regulatory Fragmentation" desc="Cities lack unified standards for autonomous delivery oversight. Users need a single interface that bridges multiple operators and jurisdictions." />
+          <InsightCard icon={Globe} title="Regulatory Fragmentation" desc="Cities lack unified standards for autonomous delivery oversight. Users need a single interface that bridges multiple operators and jurisdictions." />
           <InsightCard icon={Layers} title="Trust Through Transparency" desc="MIT Media Lab research confirms that real-time tracking and clear incident resolution processes significantly increase public acceptance of autonomous systems." />
         </div>
 
@@ -726,37 +677,31 @@ const Index: React.FC = () => {
         </SectionDesc>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Principle
-            number="1"
             icon={Eye}
             title="Transparency Through Real-Time Data"
             desc="The live map with active vehicle/drone positions gives citizens immediate visibility into autonomous operations. Research from MIT Media Lab shows that information asymmetry is the primary driver of public distrust — by surfacing real-time data, we transform opaque technology into a visible, monitorable service."
           />
           <Principle
-            number="2"
             icon={Zap}
             title="Frictionless Incident Reporting"
             desc="The report flow uses progressive disclosure — urgency first, then type, auto-detected location, and optional evidence. This reduces cognitive load while ensuring comprehensive data capture. The 3-tap urgency selector directly addresses the finding that 23% of incidents go unreported due to complex processes."
           />
           <Principle
-            number="3"
             icon={Lock}
             title="Structured Accountability Loop"
             desc="Every report generates a tracked case ID with a mandatory 48-hour operator response window. If unresolved, cases auto-escalate to the City Transportation Authority. This shifts the burden from citizens to operators, creating a feedback loop that incentivizes better safety practices."
           />
           <Principle
-            number="4"
             icon={Shield}
             title="Safety as Ambient Signal"
             desc="The always-visible safety status (green/amber/red) provides ambient awareness without requiring active engagement. This leverages the 'calm technology' pattern — information at the periphery of attention that becomes focal when the situation demands it."
           />
           <Principle
-            number="5"
             icon={Palette}
             title="WCAG-Compliant Accessibility"
             desc="All color combinations meet AA contrast ratios (4.5:1 minimum). The 8pt spacing grid ensures consistent, predictable layouts. Large touch targets (44px) accommodate all users, serving both tech-savvy users like Sarah and less technical users like Marcus equally."
           />
           <Principle
-            number="6"
             icon={Bot}
             title="Multi-Operator Unification"
             desc="Unlike existing solutions that are operator-specific, UrbanShield aggregates all autonomous delivery services into one interface. Citizens shouldn't need separate apps for each delivery company — the platform acts as a neutral civic layer between operators and communities."
